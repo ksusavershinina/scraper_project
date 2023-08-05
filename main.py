@@ -51,6 +51,8 @@ cur.execute("""
 result = cur.fetchall()
 
 for i in result:
-    print(i)
+    #print(re.sub(r'\W', '', i[1]))
+    print(re.sub(r'-', '', i[0]))
+    #print(i)
 
 con.close()
