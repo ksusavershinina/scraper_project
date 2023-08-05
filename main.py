@@ -1,4 +1,5 @@
 import pandas as pd
+<<<<<<< HEAD
 import sqlite3
 import re
 import numpy as np
@@ -27,34 +28,59 @@ df['Аннотация'] = df['Аннотация'].map(lambda x: re.sub('\W', '
 df['предоплата'] = df['предоплата'].map(lambda x: re.sub('\W', '', x) if type(x) != float else np.nan)
 
 
+=======
+import csv
+import sqlite3
+import re
+
+df = pd.read_csv("D:\OneDrive\Рабочий стол\mk_price_21-07-2023.csv", sep=";")
+>>>>>>> 8877408 (add database)
 
 con = sqlite3.connect('database.db')
 
 cur = con.cursor()
 
 df.to_sql(
+<<<<<<< HEAD
     name='slow_books_database',
+=======
+    name='table1',
+>>>>>>> 8877408 (add database)
     con=con,
     if_exists='replace',
     index=False,
     dtype={
         'Заказ': 'text',
         'Код_циф': 'integer',
+<<<<<<< HEAD
         'ISBN': 'real',
+=======
+        'ISBN': 'REAL',
+>>>>>>> 8877408 (add database)
         'Автор': 'text',
         'Название': 'text',
         'Издательство': 'text',
         'Город': 'text',
+<<<<<<< HEAD
         'Год': 'integer',
         'Цена': 'real',
         'Код_бук': 'text',
+=======
+        'Год': 'real',
+        'Цена': 'real',
+        'Код_бук': 'real',
+>>>>>>> 8877408 (add database)
         'Кол-во стр.': 'real',
         'Формат': 'text',
         'Размер': 'text',
         'Вес': 'real',
         'Тип обл.': 'text',
         'Серия': 'text',
+<<<<<<< HEAD
         'Стандарт': 'text',
+=======
+        'Стандарт': 'real',
+>>>>>>> 8877408 (add database)
         'Наличие': 'text',
         'тираж': 'text',
         'на складе': 'text',
@@ -64,15 +90,27 @@ df.to_sql(
     }
 )
 
+<<<<<<< HEAD
 cur.execute("""
     SELECT ISBN, Название
     FROM slow_books_database
+=======
+
+cur.execute("""
+    SELECT ISBN, Название  
+    FROM table1 
+>>>>>>> 8877408 (add database)
     WHERE ISBN NOT IN ('-')
 """)
 
 result = cur.fetchall()
 
+<<<<<<< HEAD
 # for i in result:
     # print(i)
+=======
+for i in result:
+    print(i)
+>>>>>>> 8877408 (add database)
 
 con.close()
