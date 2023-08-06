@@ -8,12 +8,11 @@ class BookSpider(scrapy.Spider):
     name = 'livelib'
     start_urls = ['https://www.livelib.ru/find']
     def parse(self, response):
-        a = ['978-5-6044767-4-1',
-             '978-5-6044767-7-2',
-             '978-5-9500341-0-7',
-             '978-9934-8753-1-1',
-             '978-5-600-01715-3']
-        #TODO: как сделать так, чтобы мы шли по исбн и названиям? надо ыпихнуть так, чтобы везде шло. стоит ли исполь-оавть meta?
+        a = [('978-5-6044767-4-1', 'title1'),
+             ('978-5-6044767-7-2', 'title2'),
+             ('978-5-9500341-0-7', 'title3'),
+             ('978-9934-8753-1-1', 'title4'),
+             ('978-5-600-01715-3', 'title4')]
         for isbn, title in a:
             link = f"https://www.livelib.ru/find/{isbn}"
             yield response.follow(link, callback=self.parse_page, meta={'title': title})
