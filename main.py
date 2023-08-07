@@ -2,7 +2,6 @@ import pandas as pd
 import csv
 import sqlite3
 import re
-import BookSpider
 
 df = pd.read_csv("D:\OneDrive\Рабочий стол\mk_price_21-07-2023.csv", sep=";")
 

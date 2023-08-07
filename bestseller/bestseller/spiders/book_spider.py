@@ -1,5 +1,5 @@
 import scrapy
-import re
+
 
 class BookSpider(scrapy.Spider):
     name = 'livelib'
