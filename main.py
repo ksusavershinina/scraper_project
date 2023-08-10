@@ -13,7 +13,7 @@ df['Город'] = df['Город'].map(lambda x: re.sub('\W', '', str(x)) if ty
 df['Год'] = df['Год'].map(lambda x: x if re.search(r'\d{4}', str(x)) else np.nan)
 # df['Цена'] = df['Цена'].map(lambda x: x if re.search(r'\d{3}', str(x)) else np.nan)
 df['Код_бук'] = df['Код_бук'].map(lambda x: re.sub('\W', '', str(x)) if type(x) != float else np.nan)
-df['Кол-во стр.'] = df['Кол-во стр.'].map(lambda x: x if re.search(r'\d', str(x)) else np.nan)
+df['Кол-во стр.'] = df['Кол-во стр.'].map(lambda x: re.sub('\D', '', str(x)) if type(x) != float else np.nan)
 #df['Формат'] = df['Формат'].map(lambda x: re.sub('\W', '', str(x)) if type(x) != float else np.nan)
 #df['Размер'] = df['Размер'].map(lambda x: re.sub('\W', '', str(x)) if type(x) != float else np.nan)
 df['Вес'] = df['Вес'].map(lambda x: x if re.search(r'\d', str(x)) else np.nan)
@@ -40,7 +40,7 @@ df.to_sql(
     dtype={
         'Заказ': 'text',
         'Код_циф': 'integer',
-        'ISBN': 'real',
+        'ISBN': 'integer',
         'Автор': 'text',
         'Название': 'text',
         'Издательство': 'text',
@@ -48,7 +48,7 @@ df.to_sql(
         'Год': 'integer',
         'Цена': 'real',
         'Код_бук': 'text',
-        'Кол-во стр.': 'real',
+        'Кол-во стр.': 'integer',
         'Формат': 'text',
         'Размер': 'text',
         'Вес': 'real',
@@ -72,7 +72,8 @@ cur.execute("""
 
 result = cur.fetchall()
 
-# for i in result:
-    # print(i)
+for i in result:
+    if i != np.nan:
+        print(i)
 
 con.close()
