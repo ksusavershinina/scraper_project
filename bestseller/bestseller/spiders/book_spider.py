@@ -53,13 +53,14 @@ class BookSpider(scrapy.Spider):
                 'description': '-',
                 'book_cover': '-',
             }
-        # надо прописать условия на 0 и больше 1 ссылки
-        yield response.follow(url=book_link, callback=self.parse_book)
+        else:
+            # надо прописать условия на 0 и больше 1 ссылки
+            yield response.follow(url=book_link, callback=self.parse_book)
 
     def parse_book(self, response):
         logging.debug('Parsing book...', )
         description = response.css('#lenta-card__text-edition-escaped::text').get()
-        book_cover = response.css('img.bc-menu__image::attr(href)').get()
+        book_cover = response.css('img.bc-menu__image::attr(src)').get()
         if description:
             description = description.strip()
             description = re.sub(r'\s+', ' ', description)
