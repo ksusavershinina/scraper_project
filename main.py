@@ -10,28 +10,29 @@ locale.setlocale(locale.LC_TIME, 'ru_RU')
 df = pd.read_csv('./mk_price_21-07-2023.csv', sep=";")
 df['Код_циф'] = pd.to_numeric(df['Код_циф'], errors='coerce')
 df['ISBN'] = df['ISBN'].map(lambda x: re.sub('-', '', x))
-df['Автор'] = df['Автор'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and x != '') else np.nan)
+df['Автор'] = df['Автор'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
 df['Название'] = df['Название'].map(lambda x: re.sub('\W', '', x))
-df['Издательство'] = df['Издательство'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and x != '-') else np.nan)
-df['Город'] = df['Город'].map(lambda x: re.sub('\W', '', str(x)) if type(x) != float else np.nan)
-df['Год'] = df['Год'].map(lambda x: x if re.search(r'\d{4}', str(x)) else np.nan)
-df['Цена'] = df['Цена'].map(lambda x: re.sub('₽', '', str(x)) if (type(x) != float and x != '') else np.nan)
-df['Код_бук'] = df['Код_бук'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and x != '') else np.nan)
-df['Колво_стр'] = df['Колво_стр'].map(lambda x: re.sub('\D', '', str(x)) if (type(x) != float and x != '') else np.nan)
-df['Формат'] = df['Формат'].map(lambda x: re.sub('\W', '', str(x)) if type(x) != float else np.nan)
-df['Размер'] = df['Размер'].map(lambda x: re.sub('\W', '', str(x)) if type(x) != float else np.nan)
-df['Вес'] = df['Вес'].map(lambda x: x if re.search(r'\d', str(x)) else np.nan)
-df['Тип_обл'] = df['Тип_обл'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and x != '') else np.nan)
-df['Серия'] = df['Серия'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and x != '') else np.nan)
-df['Стандарт'] = df['Стандарт'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and x != '') else np.nan)
-df['тираж'] = df['тираж'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and x != '') else np.nan)
-df['на_складе'] = df['на_складе'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and x != '') else np.nan)
+df['Издательство'] = df['Издательство'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Город'] = df['Город'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Год'] = df['Год'].map(lambda x: re.sub('\D', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Цена'] = df['Цена'].map(lambda x: re.sub('[\s₽]', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Цена'] = df['Цена'].map(lambda x: re.sub(',', '.', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Код_бук'] = df['Код_бук'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Колво_стр'] = df['Колво_стр'].map(lambda x: re.sub('\D', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Формат'] = df['Формат'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Размер'] = df['Размер'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Вес'] = df['Вес'].map(lambda x: re.sub(',', '.', x) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Вес'] = df['Вес'].map(lambda x: float(x) / 1000 if not(re.search('[.]', str(x))) else x)
+df['Тип_обл'] = df['Тип_обл'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Серия'] = df['Серия'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['Стандарт'] = df['Стандарт'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['тираж'] = df['тираж'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['на_складе'] = df['на_складе'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
 df['Дата'] = df['Дата'].map(lambda x: x if re.search(r'\d{2} \w{3} \d{4}', x) else np.nan)
 df['Дата'] = df['Дата'].map(lambda x: dt.datetime.strptime(x, '%d %b %Y').strftime('%d-%m-%Y'))
-df['Аннотация'] = df['Аннотация'].map(lambda x: re.sub('\W', '', x) if (type(x) != float and x != '') else np.nan)
-df['предоплата'] = df['предоплата'].map(lambda x: re.sub('\W', '', x) if (type(x) != float and x != '') else np.nan)
+df['Аннотация'] = df['Аннотация'].map(lambda x: re.sub('\W', '', x) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+df['предоплата'] = df['предоплата'].map(lambda x: re.sub('\W', '', x) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
 
-df['Вес'].to_csv('./data.csv')
 con = sqlite3.connect('database.db')
 
 cur = con.cursor()
@@ -44,13 +45,13 @@ df.to_sql(
     dtype={
         'Заказ': 'text',
         'Код_циф': 'integer',
-        'ISBN': 'integer',
+        'ISBN': 'text',
         'Автор': 'text',
         'Название': 'text',
         'Издательство': 'text',
         'Город': 'text',
-        'Год': 'integer',
-        'Цена': 'integer',
+        'Год': 'text',
+        'Цена': 'real',
         'Код_бук': 'text',
         'Колво_стр': 'integer',
         'Формат': 'text',
@@ -69,11 +70,10 @@ df.to_sql(
 )
 
 
-
 cur.execute("""
     CREATE TABLE book_description
     (ID INTEGER PRIMARY KEY,
-    ISBN integer,
+    ISBN text,
     Author text,
     Name text,
     Publisher text,
@@ -90,7 +90,7 @@ cur.execute("""
     Number_of_pages integer,
     Format text,
     Size text,
-    Weight text,
+    Weight real,
     Wrapper_type text,
     Standart text)
 """)
@@ -99,7 +99,7 @@ cur.execute("""
     CREATE TABLE business_info
     (ID INTEGER PRIMARY KEY,
     Booking text,
-    Cost_rub integer,
+    Cost_rub real,
     Availability text,
     Circulation text,
     In_storage text,
