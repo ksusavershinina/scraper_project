@@ -1,7 +1,7 @@
 import scrapy
 import re
 import logging
-from scrapy.utils.log import configure_logging
+from scraper_project.bestseller.bestseller.items import BestsellerItem
 
 
 class BookSpider(scrapy.Spider):
@@ -33,12 +33,12 @@ class BookSpider(scrapy.Spider):
 
     def start_requests(self):
         logging.debug('Spider is starting...')
+        logging.debug('Starting requests...')
         # получать данные из бд
         isbn_arr = ['5-87444-255-3', '5-87444-178-6', '5-87444-338-3', '978-5-87444-415-0', '5-93332-213-X',
                     '978-966-8324-20-X', '965-293-058-X', '5-902291-02-X', '978-5-6044767-4-1', '978-5-6044767-7-2',
                     '978-5-6044767-2-7', '978-5-6044767-3-4', '978-5-6044767-5-8']
         for isbn in isbn_arr:
-            logging.debug('Starting requests...')
             link = f"https://www.livelib.ru/find/{isbn}"
             yield scrapy.Request(url=link, callback=self.parse_page, headers=self.custom_headers, method="GET",
                                  cookies=self.custom_cookies)
@@ -49,10 +49,11 @@ class BookSpider(scrapy.Spider):
         # if not(book_link):
         #     book_link = response.css('.brow-title a::attr(href)').get()
         if not (book_link):
-            yield {
-                'description': '-',
-                'book_cover': '-',
-            }
+            book_item = BestsellerItem(
+                description='-',
+                book_cover='-'
+            )
+            yield book_item
         else:
             # надо прописать условия на 0 и больше 1 ссылки
             yield response.follow(url=book_link, callback=self.parse_book)
@@ -64,17 +65,22 @@ class BookSpider(scrapy.Spider):
         if description and book_cover:
             description = description.strip()
             description = re.sub(r'\s+', ' ', description)
-            yield {
-                'description': description.strip(),
-                'book_cover': book_cover,
-            }
+            book_item = BestsellerItem(
+                description=description.strip(),
+                book_cover=book_cover
+            )
+            yield book_item
+            logging.debug('Complete parsing book')
+
         elif description and not (book_cover):
-            yield {
-                'description': description.strip(),
-                'book_cover': '-',
-            }
+            book_item = BestsellerItem(
+                description=description.strip(),
+                book_cover='-'
+            )
+            yield book_item
         else:
-            yield {
-                'description': '-',
-                'book_cover': '-',
-            }
+            book_item = BestsellerItem(
+                description='-',
+                book_cover='-'
+            )
+            yield book_item
