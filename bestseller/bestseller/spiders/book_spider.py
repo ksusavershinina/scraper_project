@@ -27,9 +27,9 @@ class BookSpider(scrapy.Spider):
                       '__llutmf': '0', 'll_asid': '1371254432', 'SL_GWPT_Show_Hide_tmp': '1', 'SL_wptGlobTipTmp': '1',
                       '__ll_fv': '1690682303', '__ll_dvs': '5', 'closed_vkid_onetap': '1', '__ll_ab_mp': '1',
                       '__utnt': 'g0_y0_a15721_u0_c0', '__ll_unreg_session': '4cfcc567dda02071eee09dca94ff232d',
-                      '__ll_unreg_sessions_count': '1', '__ll_cp': '1', 'pushsub': '1', '__ll_dv': '1691759015',
-                      '__gr': 'g102c39_g1c12_g1243c1_g1240c2_g533c4_g527c6_g433c4_g1217c4_g1360c2_g1226c2_g430c2_g1143c3_g1140c4_g137c3_g144c2_g146c1_g426c1_g143c2_g394c1_g387c1_g510c2_g520c1_g601c3_g537c36_g549c1_g547c1_g670c1_g641c1_g76c1_g535c1_g518c1_g611c32_g107c1_g150c1_g1319c1_g1318c1_g148c1_g141c1_g149c1_g142c1_g1142c1_g1321c1_g1163c1_g1150c1_',
-                      'iwatchyou': '3d1fa16abc8455f326c604587166bca3'}
+                      '__ll_unreg_sessions_count': '1', '__ll_cp': '1', 'pushsub': '1', '__ll_dv': '1691854618',
+                      '__gr': 'g102c39_g1c12_g1243c1_g1240c4_g533c4_g527c6_g433c6_g1217c6_g1360c2_g1226c2_g430c2_g1143c3_g1140c4_g137c3_g144c2_g146c1_g426c1_g143c2_g394c1_g387c1_g510c2_g520c1_g601c3_g537c36_g549c1_g547c1_g670c1_g641c1_g76c1_g535c1_g518c1_g611c32_g107c1_g150c1_g1319c1_g1318c1_g148c1_g141c1_g149c1_g142c1_g1142c1_g1321c1_g1163c1_g1150c1_g1247c2_g1276c2_',
+                      'iwatchyou': '39e3dd244552adf9e9020eef99e080a7'}
 
     def start_requests(self):
         logging.debug('Spider is starting...')
@@ -61,12 +61,17 @@ class BookSpider(scrapy.Spider):
         logging.debug('Parsing book...', )
         description = response.css('#lenta-card__text-edition-escaped::text').get()
         book_cover = response.css('img.bc-menu__image::attr(src)').get()
-        if description:
+        if description and book_cover:
             description = description.strip()
             description = re.sub(r'\s+', ' ', description)
             yield {
                 'description': description.strip(),
                 'book_cover': book_cover,
+            }
+        elif description and not (book_cover):
+            yield {
+                'description': description.strip(),
+                'book_cover': '-',
             }
         else:
             yield {
