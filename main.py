@@ -7,31 +7,46 @@ import locale
 
 locale.setlocale(locale.LC_TIME, 'ru_RU')
 
+def clean_str(column_name):
+    df[column_name] = df[column_name].map(lambda x: re.sub('[\n\t]', '', str(x)) if (type(x) != float and not(re.search(r'^\W{1}', x))) else np.nan)
+
+def clean_numbers(column_name):
+    df[column_name] = df[column_name].map(lambda x: re.sub(r'\D', '', str(x)) if (type(x) != float and not(re.search(r'^[а-я]*', x))) else np.nan)
+    df[column_name] = df[column_name].map(lambda x: re.sub(r'\d*[-,;.+]', '', str(x)) if (type(x) != float) else np.nan)
+
+def clean_isbn(column_name):
+    df[column_name] = df[column_name].map(lambda x: re.sub('-', '', x) if (type(x) != float and not(re.search(r'^\W{1}', x))) else np.nan)
+
+def сlean_date(column_name):
+    df[column_name] = df[column_name].map(lambda x: x if re.search(r'\d{2} \w{3} \d{4}', x) else np.nan)
+    df[column_name] = df[column_name].map(lambda x: dt.datetime.strptime(x, '%d %b %Y').strftime('%d-%m-%Y'))
+
+def clean_cost(column_name):
+    df[column_name] = df[column_name].map(
+        lambda x: re.sub('₽', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+
+def clean_wieght(column_name):
+    df[column_name] = df[column_name].map(lambda x: re.sub(',', '.', x) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+    df[column_name] = df[column_name].map(lambda x: float(x) / 1000 if not (re.search('[.]', str(x))) else x)
+
+
+
 df = pd.read_csv('./mk_price_21-07-2023.csv', sep=";")
+
 df['Код_циф'] = pd.to_numeric(df['Код_циф'], errors='coerce')
-df['ISBN'] = df['ISBN'].map(lambda x: re.sub('-', '', x))
-df['Автор'] = df['Автор'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Название'] = df['Название'].map(lambda x: re.sub('\W', '', x))
-df['Издательство'] = df['Издательство'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Город'] = df['Город'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Год'] = df['Год'].map(lambda x: re.sub('\D', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Цена'] = df['Цена'].map(lambda x: re.sub('[\s₽]', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Цена'] = df['Цена'].map(lambda x: re.sub(',', '.', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Код_бук'] = df['Код_бук'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Колво_стр'] = df['Колво_стр'].map(lambda x: re.sub('\D', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Формат'] = df['Формат'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Размер'] = df['Размер'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Вес'] = df['Вес'].map(lambda x: re.sub(',', '.', x) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Вес'] = df['Вес'].map(lambda x: float(x) / 1000 if not(re.search('[.]', str(x))) else x)
-df['Тип_обл'] = df['Тип_обл'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Серия'] = df['Серия'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Стандарт'] = df['Стандарт'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['тираж'] = df['тираж'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['на_складе'] = df['на_складе'].map(lambda x: re.sub('\W', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['Дата'] = df['Дата'].map(lambda x: x if re.search(r'\d{2} \w{3} \d{4}', x) else np.nan)
-df['Дата'] = df['Дата'].map(lambda x: dt.datetime.strptime(x, '%d %b %Y').strftime('%d-%m-%Y'))
-df['Аннотация'] = df['Аннотация'].map(lambda x: re.sub('\W', '', x) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-df['предоплата'] = df['предоплата'].map(lambda x: re.sub('\W', '', x) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+clean_isbn('ISBN')
+
+columns_with_str = ('Автор', 'Название', 'Издательство', 'Город', 'Код_бук', 'Формат', 'Размер', 'Тип_обл', 'Серия', 'Стандарт', 'тираж', 'на_складе', 'Аннотация', 'предоплата')
+for i in columns_with_str:
+    clean_str(i)
+
+columns_with_numbers = ('Год', 'Колво_стр')
+for i in columns_with_numbers:
+    clean_numbers(i)
+
+clean_wieght('Вес')
+clean_cost('Цена')
+сlean_date('Дата')
 
 con = sqlite3.connect('database.db')
 
@@ -50,7 +65,7 @@ df.to_sql(
         'Название': 'text',
         'Издательство': 'text',
         'Город': 'text',
-        'Год': 'text',
+        'Год': 'integer',
         'Цена': 'real',
         'Код_бук': 'text',
         'Колво_стр': 'integer',
@@ -69,9 +84,8 @@ df.to_sql(
     }
 )
 
-
 cur.execute("""
-    CREATE TABLE book_description
+    CREATE TABLE IF NOT EXISTS book_description
     (ID INTEGER PRIMARY KEY,
     ISBN text,
     Author text,
@@ -85,7 +99,7 @@ cur.execute("""
 """)
 
 cur.execute("""
-    CREATE TABLE book_characteristics
+    CREATE TABLE IF NOT EXISTS book_characteristics
     (ID INTEGER PRIMARY KEY,
     Number_of_pages integer,
     Format text,
@@ -96,7 +110,7 @@ cur.execute("""
 """)
 
 cur.execute("""
-    CREATE TABLE business_info
+    CREATE TABLE IF NOT EXISTS business_info
     (ID INTEGER PRIMARY KEY,
     Booking text,
     Cost_rub real,
@@ -107,7 +121,7 @@ cur.execute("""
 """)
 
 cur.execute("""
-    CREATE TABLE book_codes
+    CREATE TABLE IF NOT EXISTS book_codes
     (ID INTEGER PRIMARY KEY,
     Code_num integer,
     Code_txt text)
@@ -165,19 +179,6 @@ cur.execute("""
 """)
 
 cur.execute("DROP TABLE slow_books_database")
-
-
-# cur.execute("""
-#     SELECT ISBN, Название
-#     FROM slow_books_database
-#     WHERE ISBN NOT IN ('-')
-# """)
-#
-# result = cur.fetchall()
-#
-# for i in result:
-#     if i != np.nan:
-#         print(i)
 
 con.commit()
 
