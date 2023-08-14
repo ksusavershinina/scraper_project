@@ -70,9 +70,11 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "bestseller.pipelines.BestsellerPipeline": 300,
-#}
+ITEM_PIPELINES = {
+    'scraper_project.bestseller.bestseller.pipelines.DescriptionPipeline': 300,
+    'scraper_project.bestseller.bestseller.pipelines.GenresPipeline': 400,
+}
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

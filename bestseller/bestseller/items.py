@@ -9,4 +9,5 @@ import scrapy
 class BestsellerItem(scrapy.Item):
     description = scrapy.Field()
     book_cover = scrapy.Field()
+    book_genres = scrapy.Field()
 
