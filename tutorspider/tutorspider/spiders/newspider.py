@@ -1,9 +1,9 @@
 import scrapy
 
 
-class NewspiderSpider(scrapy.Spider):
-    name = "newspider"
-    allowed_domains = ["www.livelib.ru"]
+class BookSpider(scrapy.Spider):
+    name = "book24"
+    allowed_domains = ["book24.ru"]
     start_urls = ["https://www.livelib.ru/books/bestsellers"]
 
     def parse(self, response):
