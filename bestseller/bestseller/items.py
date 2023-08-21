@@ -7,6 +7,7 @@ import scrapy
 
 
 class BestsellerItem(scrapy.Item):
+    isbn = scrapy.Field()
     description = scrapy.Field()
     book_cover = scrapy.Field()
     book_genres = scrapy.Field()
