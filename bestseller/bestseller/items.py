@@ -8,5 +8,10 @@ import scrapy
 
 class BestsellerItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    book24_score = scrapy.Field()
+    # livelib_score = scrapy.Field()
+    # livelib_feedback = scrapy.Field()
+    number_of_buyers = scrapy.Field()
+    description = scrapy.Field()
+    book_cover = scrapy.Field()
+

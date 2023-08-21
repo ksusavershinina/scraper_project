@@ -14,10 +14,12 @@ NEWSPIDER_MODULE = "bestseller.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "bestseller (+https://www.livelib.ru')"
+USER_AGENT = "bestseller (+https://book24.ru/)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
+
+PROXY_POOL_BAN_POLICY = 'bestseller.policy.BanDetectionPolicyNotText'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

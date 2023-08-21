@@ -1,0 +1,123 @@
+import numpy as np
+import requests
+import scrapy
+import numpy
+import logging
+
+
+# from scraper_project.bestseller.bestseller.items import BestsellerItem
+
+
+class Book24Spider(scrapy.Spider):
+    name = "book24"
+    allowed_domains = ["book24.ru", "book24.ru/search"]
+    start_urls = ["https://book24.ru/search"]
+
+    headers = {
+        'host': 'book24.ru',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'ru,en;q=0.9,en-GB;q=0.8,en-US;q=0.7',
+        'Cache-Control': 'max-age=0',
+        'If-Modified-Since': 'Sunday, 20-Aug-2023 10:25:58 GMT',
+        'Sec-Ch-Ua': '"Not/A)Brand";v="99", "Microsoft Edge";v="115", "Chromium";v="115"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': "Windows",
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': "navigate",
+        "Sec-Fetch-Site": "same-origin",
+        'Upgrade-Insecure-Requests': "1",
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.203',
+    }
+
+    cookie = {
+        'g4c_x': '1', 'gdeslon.ru.__arc_aid': '91052',
+        'gdeslon.ru.__arc_token': '0738e1159429026c1a03ee720bff78333a46959c', 'gdeslon.ru.__arc_domain': 'gdeslon.ru',
+        '_ym_d': '1692319734', '_ym_uid': '1692319734716127214', '_gid': 'GA1.2.629691625.1692319734',
+        '_ga_T9TF1ZMWX4': 'GS1.1.1692319734.1.0.1692319734.0',
+        'BITRIX_SM_book24_visitor_id': 'c5871259-212e-43df-a299-504b2d195da3',
+        'b24DiscountUrlRequest': 'utm_source%3Dgdeslon',
+        'popmechanic_sbjs_migrations': 'popmechanic_1418474375998%3D1%7C%7C%7C1471519752600%3D1%7C%7C%7C1471519752605%3D1',
+        'gdeslon.ru.user_id': 'b8242c4c-fe2f-4aee-af01-9684653093c9', 'analytic_id': '1692319737759745',
+        'adid': '169231973823187', 'tmr_lvid': 'a0571016a34eb8b4d364c8261681821d', 'tmr_lvidTS': '1692319944644',
+        'BITRIX_SM_location_name': '%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%B2%D0%BE%D1%81%D1%82%D0%BE%D0%BA',
+        'BITRIX_SM_location_code': '7b6de6a5-86d0-4735-b11a-499081111af8', 'BITRIX_SM_location_country': 'RU',
+        'BITRIX_SM_location_region_code': '3909681-d6e1-432d-b61f-ddac393cb5da',
+        'ssaid': 'f90eb70-3d61-11ee-9cae-e1163324d6f9',
+        '_tt_enable_cookie': '1', '_ttp': 'OUBb9Ye25hhQ5I-DgrpgbBFctyL',
+        'BITRIX_SM_location_coords': '%5B%2243.116391%22%2C%22131.882421%22%5D',
+        'flocktory-uuid': 'b1acca01-d45e-4503-87f5-36625abfba41-5', 'g4c_x': '1',
+        '_ym_isad': '2', 'PHPSESSID': 'ZgkeemUib2tE08jPW3J054Hxl9SAxTBj',
+        'mindboxDeviceUUID': '1026951b-32c4-4053-8dc6-5e2b3b335173',
+        'directCrm - session': '7B%22deviceGuid%22%3A%221026951b-32c4-4053-8dc6-5e2b3b335173%22%7D',
+        'directCrm-session': '%7B%22deviceGuid%22%3A%221026951b-32c4-4053-8dc6-5e2b3b335173%22%7D', 'ym_visorc': 'b',
+        '_ga': 'GA1.2.418833563.1692319734', 'tmr_detect': '0%7C1692527170651', '__tld__': 'null',
+        'COOKIES_ACCEPTED': 'Y',
+        '_ga_L57STKDPVC': 'GS1.1.1692527166.17.1.1692527376.58.0.0'
+    }
+
+    def start_requests(self):
+        logging.info('Start parsing...')
+
+        isbn_lst = ['9785950034107', '9785600017153', '9789934875311', '9785604476741', '9785604476772',
+                    '9785604476727', '9785604476734', '9785604476758', '9785604476710', '9785604476703',
+                    '9785907682436']
+        for isbn in isbn_lst:
+            url = f'https://book24.ru/search/?q={isbn}'
+            yield scrapy.Request(url=url, callback=self.parse, headers=self.headers, method='GET', cookies=self.cookie,
+                                 meta={'isbn': isbn})
+
+    def parse(self, response):
+        isbn = response.meta.get('isbn')
+        book_link = response.css('.product-card__content a::attr(href)').get()
+        if not book_link:
+
+            book_item = {
+                'book24_score': np.nan,
+                'livelib_score': np.nan,
+                'livelib_feedback': np.nan,
+                'number_of_buyers': np.nan,
+                'description': np.nan,
+                'book_cover': np.nan
+            }
+
+            # book_item = BestsellerItem(
+            #     book24_score = None,
+            #     number_of_buyers = None,
+            #     description = None,
+            #     book_cover = None
+            # )
+
+            yield book_item
+
+        else:
+            yield response.follow(url=book_link, callback=self.parse_book, meta={'isbn': isbn})
+
+    def parse_book(self, response):
+        # isbn = response.meta.get('isbn')
+        # url = f'https://book24.ru/api/v1/catalog/product/rating/livelib/?isbn={isbn}'
+        # api = requests.get(url=url, headers=self.headers, cookies=self.cookie)
+        book24_score = response.css('.rating-widget__main-text::text').getall()[0]
+        # livelib_score = api.json()['data']['rating']
+        # livelib_feedback = api.json()['data']['countReaders']
+        number_of_buyers = response.css('.product-detail-page__purchased-text::text').get()
+        description = response.css('.product-about__text p::text').getall()
+        book_cover = response.css('img.product-poster__main-image::attr(src)').get()
+
+        # book_item = {
+        #     'book24_score': book24_score,
+        #     'livelib_score': livelib_score,
+        #     'livelib_feedback': livelib_feedback,
+        #     'number_of_buyers': number_of_buyers,
+        #     'description': description,
+        #     'book_cover': book_cover
+        # }
+
+        book_item = BestsellerItem(
+            book24_score=book24_score,
+            number_of_buyers=number_of_buyers,
+            description=description,
+            book_cover=book_cover
+        )
+
+        yield book_item
