@@ -15,6 +15,7 @@ def start_book24_spider(ROBOTSTXT_OBEY=False, DOWNLOAD_DELAY=0, LOG_LEVEL='INFO'
         'LOG_FILE': 'logs.txt',
         'LOG_FILE_APPEND': True,
         'LOG_SHORT_NAMES': True,
+        # 'DOWNLOADER_CLIENTCONTEXTFACTORY': 'scrapy.core.downloader.contextfactory.BrowserLikeContextFactory',
         # 'ITEM_PIPELINES': {
         #     'scraper_project.bestseller.bestseller.pipelines.DescriptionPipeline': 300,
         #     'scraper_project.bestseller.bestseller.pipelines.GenresPipeline': 400,

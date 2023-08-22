@@ -1,11 +1,7 @@
-import numpy as np
-import requests
 import scrapy
-import numpy
 import logging
 
-
-# from scraper_project.bestseller.bestseller.items import BestsellerItem
+from scraper_project.bestseller.bestseller.items import BestsellerItem
 
 
 class Book24Spider(scrapy.Spider):
@@ -72,21 +68,21 @@ class Book24Spider(scrapy.Spider):
         book_link = response.css('.product-card__content a::attr(href)').get()
         if not book_link:
 
-            book_item = {
-                'book24_score': np.nan,
-                'livelib_score': np.nan,
-                'livelib_feedback': np.nan,
-                'number_of_buyers': np.nan,
-                'description': np.nan,
-                'book_cover': np.nan
-            }
+            # book_item = {
+            #     'book24_score': np.nan,
+            #     'livelib_score': np.nan,
+            #     'livelib_feedback': np.nan,
+            #     'number_of_buyers': np.nan,
+            #     'description': np.nan,
+            #     'book_cover': np.nan
+            # }
 
-            # book_item = BestsellerItem(
-            #     book24_score = None,
-            #     number_of_buyers = None,
-            #     description = None,
-            #     book_cover = None
-            # )
+            book_item = BestsellerItem(
+                book24_score=None,
+                number_of_buyers=None,
+                description=None,
+                book_cover=None
+            )
 
             yield book_item
 
@@ -106,8 +102,8 @@ class Book24Spider(scrapy.Spider):
 
         # book_item = {
         #     'book24_score': book24_score,
-        #     'livelib_score': livelib_score,
-        #     'livelib_feedback': livelib_feedback,
+        #     # 'livelib_score': livelib_score,
+        #     # 'livelib_feedback': livelib_feedback,
         #     'number_of_buyers': number_of_buyers,
         #     'description': description,
         #     'book_cover': book_cover
