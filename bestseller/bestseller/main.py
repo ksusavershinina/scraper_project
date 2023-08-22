@@ -4,6 +4,32 @@ from scrapy.crawler import CrawlerProcess
 import logging
 from filters import DumpingStatsFilter  # Import the custom filter
 
+import sqlite3
+import pandas as pd
+
+# load data file
+df = pd.read_csv('mk_price_21-07-2023.csv')
+
+# data clean up
+df.columns = df.columns.str.strip()
+
+# creating db
+connection = sqlite3.connect('demo.db')
+cursor = connection.cursor()
+query = "SELECT ISBN FROM books_table WHERE ISBN != '-' AND ISBN IS NOT NULL"
+cursor.execute(query)
+isbn_array = [row[0] for row in cursor.fetchall()]
+
+
+# load data file to sqlite
+df.to_sql('books_table', connection, if_exists="replace")
+
+
+# close connection
+connection.close()
+
+"""clean isbn_array and store it like this:"""
+
 isbn_arr = ['978-5-9500341-0-7', '978-5-600-01715-3', '978-9934-8753-1-1', '978-5-6044767-4-1', '978-5-6044767-7-2',
      '978-5-6044767-2-7', '978-5-6044767-3-4', '978-5-6044767-5-8', '978-5-6044767-1-0', '978-5-6044767-0-3',
      '978-5-907682-43-6', '978-5-89423-110-5', '978-5-89423-110-5', '978-5-89423-110-5', '978-5-89423-110-5',
@@ -2461,6 +2487,16 @@ isbn_arr = ['978-5-9500341-0-7', '978-5-600-01715-3', '978-9934-8753-1-1', '978-
      '978-601-271-468-5', '978-601-271-454-8', '978-601-271-455-5', '978-601-271-651-1', '978-5-7598-2795-5',
      '978-5-7598-2776-4']
 
+con = sqlite3.connect('books2.db')
+cur = con.cursor()
+cur.execute("""CREATE TABLE IF NOT EXISTS isbn_test(isbn TEXT, description TEXT, book_cover TEXT, book_genres TEXT)""")
+for isbn in isbn_arr:
+    cur.execute("""INSERT INTO isbn_test VALUES (?, ?, ?, ?)""", (isbn, None, None, None))
+    con.commit()
+
+con.close()
+
+
 def start_livelib_spider(ROBOTSTXT_OBEY=False, DOWNLOAD_DELAY=0, LOG_LEVEL='DEBUG', filter_stats=False):
     logging.basicConfig(format='%(levelname)s: %(message)s')
     logger = logging.getLogger()
@@ -2497,3 +2533,8 @@ def start_livelib_spider(ROBOTSTXT_OBEY=False, DOWNLOAD_DELAY=0, LOG_LEVEL='DEBU
 
 
 start_livelib_spider()
+
+# полное описание
+# другая логика обращения к книге
+# про бд и эффективное обращение
+# recaptcha
