@@ -12,7 +12,6 @@ BOT_NAME = "bestseller"
 SPIDER_MODULES = ["bestseller.spiders"]
 NEWSPIDER_MODULE = "bestseller.spiders"
 
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = "bestseller (+https://book24.ru/)"
 
