@@ -1,7 +1,7 @@
 import scrapy
 import logging
 
-from scraper_project.bestseller.bestseller.items import BestsellerItem
+from scraper_project.parsing.parsing.items import BestsellerItem
 
 
 class Book24Spider(scrapy.Spider):
