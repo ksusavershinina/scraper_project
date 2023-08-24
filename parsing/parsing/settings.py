@@ -1,4 +1,4 @@
-# Scrapy settings for bestseller project
+# Scrapy settings for parsing project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,18 +7,18 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "bestseller"
+BOT_NAME = "parsing"
 
-SPIDER_MODULES = ["bestseller.spiders"]
-NEWSPIDER_MODULE = "bestseller.spiders"
+SPIDER_MODULES = ["parsing.spiders"]
+NEWSPIDER_MODULE = "parsing.spiders"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "bestseller (+https://book24.ru/)"
+USER_AGENT = "parsing (+https://book24.ru/)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
-PROXY_POOL_BAN_POLICY = 'bestseller.policy.BanDetectionPolicyNotText'
+PROXY_POOL_BAN_POLICY = 'parsing.policy.BanDetectionPolicyNotText'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -46,13 +46,13 @@ PROXY_POOL_BAN_POLICY = 'bestseller.policy.BanDetectionPolicyNotText'
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "bestseller.middlewares.BestsellerSpiderMiddleware": 543,
+#    "parsing.middlewares.BestsellerSpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "bestseller.middlewares.BestsellerDownloaderMiddleware": 543,
+#    "parsing.middlewares.BestsellerDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -64,7 +64,7 @@ PROXY_POOL_BAN_POLICY = 'bestseller.policy.BanDetectionPolicyNotText'
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    "bestseller.pipelines.BestsellerPipeline": 300,
+#    "parsing.pipelines.BestsellerPipeline": 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)

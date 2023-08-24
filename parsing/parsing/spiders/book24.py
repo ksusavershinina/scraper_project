@@ -1,13 +1,10 @@
 import scrapy
-import logging
-
-from scraper_project.bestseller.bestseller.items import BestsellerItem
+from scraper_project.parsing.parsing.items import BestsellerItem
 
 
 class Book24Spider(scrapy.Spider):
     name = "book24"
     allowed_domains = ["book24.ru", "book24.ru/search"]
-    start_urls = ["https://book24.ru/search"]
 
     headers = {
         'host': 'book24.ru',
@@ -52,30 +49,19 @@ class Book24Spider(scrapy.Spider):
         '_ga_L57STKDPVC': 'GS1.1.1692527166.17.1.1692527376.58.0.0'
     }
 
+    def __init__(self, isbn_list):
+        super(Book24Spider, self).__init__()
+        self.isbn_list = isbn_list
+
     def start_requests(self):
-        logging.info('Start parsing...')
+        for isbn in self.isbn_list:
+            yield scrapy.Request(
+                url='https://book24.ru/search/?q={}'.format(isbn), callback=self.parse_link,
+                headers=self.headers, method='GET', cookies=self.cookie)
 
-        isbn_lst = ['9785950034107', '9785600017153', '9789934875311', '9785604476741', '9785604476772',
-                    '9785604476727', '9785604476734', '9785604476758', '9785604476710', '9785604476703',
-                    '9785907682436']
-        for isbn in isbn_lst:
-            url = f'https://book24.ru/search/?q={isbn}'
-            yield scrapy.Request(url=url, callback=self.parse, headers=self.headers, method='GET', cookies=self.cookie,
-                                 meta={'isbn': isbn})
-
-    def parse(self, response):
-        isbn = response.meta.get('isbn')
+    def parse_link(self, response, **kwargs):
         book_link = response.css('.product-card__content a::attr(href)').get()
         if not book_link:
-
-            # book_item = {
-            #     'book24_score': np.nan,
-            #     'livelib_score': np.nan,
-            #     'livelib_feedback': np.nan,
-            #     'number_of_buyers': np.nan,
-            #     'description': np.nan,
-            #     'book_cover': np.nan
-            # }
 
             book_item = BestsellerItem(
                 book24_score=None,
@@ -85,29 +71,15 @@ class Book24Spider(scrapy.Spider):
             )
 
             yield book_item
-
         else:
-            yield response.follow(url=book_link, callback=self.parse_book, meta={'isbn': isbn})
 
-    def parse_book(self, response):
-        # isbn = response.meta.get('isbn')
-        # url = f'https://book24.ru/api/v1/catalog/product/rating/livelib/?isbn={isbn}'
-        # api = requests.get(url=url, headers=self.headers, cookies=self.cookie)
+            yield response.follow(url=book_link, callback=self.parse_book)
+
+    def parse_book(self, response, **kwargs):
         book24_score = response.css('.rating-widget__main-text::text').getall()[0]
-        # livelib_score = api.json()['data']['rating']
-        # livelib_feedback = api.json()['data']['countReaders']
         number_of_buyers = response.css('.product-detail-page__purchased-text::text').get()
         description = response.css('.product-about__text p::text').getall()
         book_cover = response.css('img.product-poster__main-image::attr(src)').get()
-
-        # book_item = {
-        #     'book24_score': book24_score,
-        #     # 'livelib_score': livelib_score,
-        #     # 'livelib_feedback': livelib_feedback,
-        #     'number_of_buyers': number_of_buyers,
-        #     'description': description,
-        #     'book_cover': book_cover
-        # }
 
         book_item = BestsellerItem(
             book24_score=book24_score,
