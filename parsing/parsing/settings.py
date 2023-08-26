@@ -13,12 +13,12 @@ SPIDER_MODULES = ["parsing.spiders"]
 NEWSPIDER_MODULE = "parsing.spiders"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "parsing (+https://book24.ru/)"
+# USER_AGENT = "parsing (+https://book24.ru/)"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
-PROXY_POOL_BAN_POLICY = 'parsing.policy.BanDetectionPolicyNotText'
+# PROXY_POOL_BAN_POLICY = 'parsing.policy.BanDetectionPolicyNotText'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

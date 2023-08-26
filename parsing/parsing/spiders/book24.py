@@ -1,5 +1,5 @@
 import scrapy
-from scraper_project.parsing.parsing.items import BestsellerItem
+from scraper_project.parsing.parsing.items import ParsingItem
 
 
 class Book24Spider(scrapy.Spider):
@@ -63,12 +63,12 @@ class Book24Spider(scrapy.Spider):
         book_link = response.css('.product-card__content a::attr(href)').get()
         if not book_link:
 
-            book_item = BestsellerItem(
-                book24_score=None,
-                number_of_buyers=None,
-                description=None,
-                book_cover=None
-            )
+            book_item = {
+                'book24_score': None,
+                'number_of_buyers': None,
+                'description': None,
+                'book_cover': None
+            }
 
             yield book_item
 
@@ -81,10 +81,17 @@ class Book24Spider(scrapy.Spider):
         description = response.css('.product-about__text p::text').getall()
         book_cover = response.css('img.product-poster__main-image::attr(src)').get()
 
-        book_item = BestsellerItem(
-            book24_score=book24_score,
-            number_of_buyers=number_of_buyers,
-            description=description,
-            book_cover=book_cover
-        )
+        book_item = {
+            'book24_score': book24_score,
+            'number_of_buyers': number_of_buyers,
+            'description': description,
+            'book_cover': book_cover
+        }
+
+        # book_item = BestsellerItem(
+        #     book24_score=book24_score,
+        #     number_of_buyers=number_of_buyers,
+        #     description=description,
+        #     book_cover=book_cover
+        # )
         yield book_item
