@@ -63,35 +63,34 @@ class Book24Spider(scrapy.Spider):
         book_link = response.css('.product-card__content a::attr(href)').get()
         if not book_link:
 
-            book_item = {
-                'book24_score': None,
-                'number_of_buyers': None,
-                'description': None,
-                'book_cover': None
-            }
+            book_item = ParsingItem(
+                book24_score=None,
+                number_of_buyers=None,
+                description=None,
+                book_cover=None
+            )
 
             yield book_item
 
         else:
-            yield response.follow(url=book_link, callback=self.parse_book)
+            yield scrapy.Request(
+                url='https://book24.ru{}'.format(book_link),
+                headers=self.headers, callback=self.parse_book)
 
     def parse_book(self, response, **kwargs):
         book24_score = response.css('.rating-widget__main-text::text').getall()[0]
+        book24_feedback = response.css('.rating-widget__other-text::text').getall()[0]
         number_of_buyers = response.css('.product-detail-page__purchased-text::text').get()
         description = response.css('.product-about__text p::text').getall()
         book_cover = response.css('img.product-poster__main-image::attr(src)').get()
 
-        book_item = {
-            'book24_score': book24_score,
-            'number_of_buyers': number_of_buyers,
-            'description': description,
-            'book_cover': book_cover
-        }
 
-        # book_item = BestsellerItem(
-        #     book24_score=book24_score,
-        #     number_of_buyers=number_of_buyers,
-        #     description=description,
-        #     book_cover=book_cover
-        # )
+        book_item = ParsingItem(
+            book24_score=book24_score,
+            book24_feedback=book24_feedback,
+            number_of_buyers=number_of_buyers,
+            description=description,
+            book_cover=book_cover
+        )
+
         yield book_item
