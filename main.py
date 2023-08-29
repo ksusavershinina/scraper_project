@@ -9,6 +9,9 @@ parserConfig = CrawlerRunner(settings={'ROBOTSTXT_OBEY': False,
                                        'LOG_FILE': 'logs.txt',
                                        'LOG_FILE_APPEND': True,
                                        'LOG_SHORT_NAMES': True,
+                                       'ITEM_PIPELINES': {
+                                           'scraper_project.parsing.parsing.pipelines.ItemPipeline': 100
+                                       },
                                        'FEEDS':
                                            {'%(name)s/%(name)s_%(time)s.json': {
                                                'format': 'json',
