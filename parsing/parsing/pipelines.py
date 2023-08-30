@@ -11,6 +11,9 @@ import re
 
 class ItemPipeline:
     def process_item(self, item, spider):
+        if item['isbn'] is not None:
+            item['isbn'] = re.sub(r'-', '', item['isbn'])
+
         if item['number_of_buyers'] is not None:
             item['number_of_buyers'] = re.sub(r'\D', '', item['number_of_buyers'])
 

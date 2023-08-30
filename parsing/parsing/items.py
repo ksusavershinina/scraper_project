@@ -7,6 +7,7 @@ import scrapy
 
 
 class ParsingItem(scrapy.Item):
+    isbn = scrapy.Field()
     book24_score = scrapy.Field()
     book24_feedback = scrapy.Field()
     number_of_buyers = scrapy.Field()

@@ -64,6 +64,7 @@ class Book24Spider(scrapy.Spider):
         if not book_link:
 
             book_item = ParsingItem(
+                isbn = None,
                 book24_score=None,
                 book24_feedback=None,
                 number_of_buyers=None,
@@ -79,6 +80,7 @@ class Book24Spider(scrapy.Spider):
                 headers=self.headers, callback=self.parse_book)
 
     def parse_book(self, response, **kwargs):
+        isbn = response.css('.app-copy-button.isbn-product._right::text').get()
         book24_score = response.css('.rating-widget__main-text::text').getall()[0]
         book24_feedback = response.css('.rating-widget__other-text::text').getall()[0]
         number_of_buyers = response.css('.product-detail-page__purchased-text::text').get()
@@ -86,6 +88,7 @@ class Book24Spider(scrapy.Spider):
         book_cover = response.css('img.product-poster__main-image::attr(src)').get()
 
         book_item = ParsingItem(
+            isbn=isbn,
             book24_score=book24_score,
             book24_feedback=book24_feedback,
             number_of_buyers=number_of_buyers,
