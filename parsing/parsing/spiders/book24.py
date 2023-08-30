@@ -65,6 +65,7 @@ class Book24Spider(scrapy.Spider):
 
             book_item = ParsingItem(
                 book24_score=None,
+                book24_feedback=None,
                 number_of_buyers=None,
                 description=None,
                 book_cover=None
@@ -83,7 +84,6 @@ class Book24Spider(scrapy.Spider):
         number_of_buyers = response.css('.product-detail-page__purchased-text::text').get()
         description = response.css('.product-about__text p::text').getall()
         book_cover = response.css('img.product-poster__main-image::attr(src)').get()
-
 
         book_item = ParsingItem(
             book24_score=book24_score,
