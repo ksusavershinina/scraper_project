@@ -19,7 +19,8 @@ NEWSPIDER_MODULE = "bestseller.spiders"
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
-PROXY_POOL_BAN_POLICY = 'bestseller.policy.BanDetectionPolicyNotText'
+PROXY_POOL_ENABLED: True
+PROXY_POOL_PAGE_RETRY_TIMES: 5
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
