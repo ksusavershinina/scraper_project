@@ -18,7 +18,7 @@ with open('database/statistic.csv', 'w', newline='', encoding='utf-8') as file:
         isbn = row[0],
         publisher = row[1]
         count = row[2]
-        writer.writerow([isbn, count, count * 100 /12833, publisher])
+        writer.writerow([isbn, count, count * 100 / number_of_books, publisher])
 
 
 

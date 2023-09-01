@@ -27,16 +27,16 @@ parserConfig = CrawlerRunner(settings={'ROBOTSTXT_OBEY': False,
                                            }}
                                        })
 
-con = sqlite3.connect('slow_books_database.db')
+con = sqlite3.connect('.database/slow_books_database.db')
 cur = con.cursor()
 
 
 
 @defer.inlineCallbacks
 def book24_parse():
-    cur.execute("SELECT ISBN DISTINCT FROM book_description")
+    cur.execute("SELECT ID, ISBN FROM book_description")
 
-    isbn_lst = cur.fetchall()
+    id_isbn_lst = cur.fetchall()
     # isbn_lst = ['978-5-9500341-0-7', '978-5-600-01715-3', '978-9934-8753-1-1', '978-5-6044767-4-1', '978-5-6044767-7-2',
     #             '978-5-6044767-2-7', '978-5-6044767-3-4', '978-5-6044767-5-8', '978-5-6044767-1-0', '978-5-6044767-0-3',
     #             '978-5-907682-43-6', '978-5-89423-110-5', '978-5-89423-110-5', '978-5-89423-110-5', '978-5-89423-110-5',
@@ -2583,7 +2583,7 @@ def book24_parse():
     #             '978-601-271-468-5', '978-601-271-454-8', '978-601-271-455-5', '978-601-271-651-1', '978-5-7598-2795-5',
     #             '978-5-7598-2776-4']
 
-    yield parserConfig.crawl(Book24Spider, isbn_lst)
+    yield parserConfig.crawl(Book24Spider, id_isbn_lst)
 
 
 book24_parse()

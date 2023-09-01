@@ -49,22 +49,26 @@ class Book24Spider(scrapy.Spider):
         '_ga_L57STKDPVC': 'GS1.1.1692527166.17.1.1692527376.58.0.0'
     }
 
-    def __init__(self, isbn_list):
+    def __init__(self, id_isbn_list):
         super(Book24Spider, self).__init__()
-        self.isbn_list = isbn_list
+        self.id_isbn_list = id_isbn_list
 
     def start_requests(self):
-        for isbn in self.isbn_list:
+        for item in self.id_isbn_list:
             yield scrapy.Request(
-                url='https://book24.ru/search/?q={}'.format(isbn), callback=self.parse_link,
-                headers=self.headers, method='GET', cookies=self.cookie)
+                url='https://book24.ru/search/?q={}'.format(item[1]), callback=self.parse_link,
+                headers=self.headers, method='GET', cookies=self.cookie, meta={'id': item[0], 'isbn': item[1]})
 
     def parse_link(self, response, **kwargs):
+
         book_link = response.css('.product-card__content a::attr(href)').get()
+        id = response.meta['id']
+        isbn = response.meta['isbn']
         if not book_link:
 
             book_item = ParsingItem(
-                isbn = None,
+                id=id,
+                isbn=isbn,
                 book24_score=None,
                 book24_feedback=None,
                 number_of_buyers=None,
@@ -77,10 +81,11 @@ class Book24Spider(scrapy.Spider):
         else:
             yield scrapy.Request(
                 url='https://book24.ru{}'.format(book_link),
-                headers=self.headers, callback=self.parse_book)
+                headers=self.headers, callback=self.parse_book, meta={'id': id, 'isbn': isbn})
 
     def parse_book(self, response, **kwargs):
-        isbn = response.css('.app-copy-button.isbn-product._right::text').get()
+        id = response.meta['id']
+        isbn = response.meta['isbn']
         book24_score = response.css('.rating-widget__main-text::text').getall()[0]
         book24_feedback = response.css('.rating-widget__other-text::text').getall()[0]
         number_of_buyers = response.css('.product-detail-page__purchased-text::text').get()
@@ -88,6 +93,7 @@ class Book24Spider(scrapy.Spider):
         book_cover = response.css('img.product-poster__main-image::attr(src)').get()
 
         book_item = ParsingItem(
+            id=id,
             isbn=isbn,
             book24_score=book24_score,
             book24_feedback=book24_feedback,

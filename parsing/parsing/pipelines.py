@@ -7,6 +7,7 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import re
+import sqlite3
 
 
 class ItemPipeline:
@@ -29,4 +30,21 @@ class ItemPipeline:
             item['description'] = ' '.join(description)
             item['description'] = re.sub(r'\r', '', item['description'])
 
+        return item
+
+
+class DatabasePipeline:
+    def __init__(self):
+        self.con = sqlite3.connect()
+        self.cur = self.con.cursor()
+        self.create_table()
+
+    def create_table(self):
+        self.cur.execute(
+            """CREATE TABLE IF NOT EXISTS isbn_test(id INTEGER PRIMARY KEY, isbn TEXT, book24_score REAL, book24_feedback INTEGER, number_of_buyers INTEGER, description TEXT, book_cover TEXT, )""")
+
+    def process_item(self, item, spider):
+        self.cur.execute(
+            f"""UPDATE isbn_test SET book24_score='{item['book24_score']}', book24_feedback='{item['book24_feedback']}', number_of_buyers='{item['number_of_buyers']}',description = '{item['description']}', book_cover = '{item['book_cover']}}' WHERE isbn = '{item['isbn']}'""")
+        self.con.commit()
         return item
