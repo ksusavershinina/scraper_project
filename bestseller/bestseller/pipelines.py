@@ -8,6 +8,7 @@
 
 import re
 import sqlite3
+import json
 
 
 class ItemPipeline:
@@ -16,6 +17,9 @@ class ItemPipeline:
             description = item['description']
             item['description'] = re.sub(r'\s+', ' ', description)
             item['description'] = description.strip()
+            item['description'] = re.sub(r'<br />|\r|\n', '',item['description'])
+            item['description'] = re.sub(r'&quot;', '"', item['description'])
+            item['description'] = re.sub('&amp;|&#039;', '\'', item['description'])
 
         if item['book_genres'] != None:
             book_genres = item['book_genres']
@@ -23,8 +27,9 @@ class ItemPipeline:
                 re.search(r'[А-Я][а-яА-ЯёЁ\s]*', genre).group() if re.search(r'[А-Я][а-яА-ЯёЁ\s]*', genre) else None
                 for genre in book_genres
             ]
-            new_cleaned_genres = ', '.join(cleaned_genres)
-            item['book_genres'] = new_cleaned_genres
+            # new_cleaned_genres = ', '.join(cleaned_genres)
+            # item['book_genres'] = new_cleaned_genres
+            item['book_genres'] = cleaned_genres
         return item
 
 
@@ -40,6 +45,6 @@ class DatabasePipeline:
         self.cur.execute("""CREATE TABLE IF NOT EXISTS isbn_test(isbn TEXT PRIMARY KEY, description TEXT, book_cover TEXT, book_genres TEXT)""")
 
     def process_item(self, item, spider):
-        self.cur.execute(f"""UPDATE isbn_test SET description = '{item['description']}', book_cover = '{item['book_cover']}', book_genres = '{item['book_genres']}' WHERE isbn = '{item['isbn']}'""")
+        self.cur.execute(f"""UPDATE isbn_test SET description = '{item['description']}', book_cover = '{item['book_cover']}', book_genres = '{json.dumps(item['book_genres'], ensure_ascii=False)}' WHERE isbn = '{item['isbn']}'""")
         self.con.commit()
         return item
