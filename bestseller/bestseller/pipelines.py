@@ -13,38 +13,58 @@ import json
 
 class ItemPipeline:
     def process_item(self, item, spider):
-        if item['description'] != None:
+        if item['description'] is not None:
             description = item['description']
             item['description'] = re.sub(r'\s+', ' ', description)
             item['description'] = description.strip()
-            item['description'] = re.sub(r'<br />|\r|\n', '',item['description'])
+            item['description'] = re.sub(r'<br />|\r|\n', '', item['description'])
             item['description'] = re.sub(r'&quot;', '"', item['description'])
             item['description'] = re.sub('&amp;|&#039;', '\'', item['description'])
 
-        if item['book_genres'] != None:
+        if item['book_genres'] is not None:
             book_genres = item['book_genres']
             cleaned_genres = [
                 re.search(r'[А-Я][а-яА-ЯёЁ\s]*', genre).group() if re.search(r'[А-Я][а-яА-ЯёЁ\s]*', genre) else None
                 for genre in book_genres
             ]
-            # new_cleaned_genres = ', '.join(cleaned_genres)
-            # item['book_genres'] = new_cleaned_genres
             item['book_genres'] = cleaned_genres
+
+        if item['read'] is not None:
+            match = re.search(r'<b>(\d+)</b>', item['read'])
+            if match:
+                item['read'] = match.group(1)
+
+        if item['plan_to_read'] is not None:
+            match = re.search(r'<b>(\d+)</b>', item['plan_to_read'])
+            if match:
+                item['plan_to_read'] = match.group(1)
+
         return item
-
-
 
 
 class DatabasePipeline:
     def __init__(self):
         self.con = sqlite3.connect('books2.db')
         self.cur = self.con.cursor()
-        self.create_table()
-
-    def create_table(self):
-        self.cur.execute("""CREATE TABLE IF NOT EXISTS isbn_test(isbn TEXT PRIMARY KEY, description TEXT, book_cover TEXT, book_genres TEXT)""")
 
     def process_item(self, item, spider):
-        self.cur.execute(f"""UPDATE isbn_test SET description = '{item['description']}', book_cover = '{item['book_cover']}', book_genres = '{json.dumps(item['book_genres'], ensure_ascii=False)}' WHERE isbn = '{item['isbn']}'""")
+        self.cur.execute("""UPDATE isbn_test SET
+            description = ?,
+            book_cover = ?,
+            book_genres = ?,
+            rate = ?,
+            read = ?,
+            plan_to_read = ?
+            WHERE isbn = ?""",
+                         (
+                             item['description'],
+                             item['book_cover'],
+                             json.dumps(item['book_genres'], ensure_ascii=False),
+                             item['rate'],
+                             item['read'],
+                             item['plan_to_read'],
+                             item['isbn']
+                         ))
+
         self.con.commit()
         return item

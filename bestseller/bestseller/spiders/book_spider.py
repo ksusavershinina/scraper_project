@@ -88,6 +88,17 @@ class BookSpider(scrapy.Spider):
         else:
             pass
 
+    def book_item(self, isbn, description, book_cover, book_genres, rate, read, plan_to_read):
+        return BestsellerItem(
+            isbn=isbn,
+            description=description,
+            book_cover=book_cover,
+            book_genres=book_genres,
+            rate=rate,
+            read=read,
+            plan_to_read=plan_to_read,
+        )
+
     def start_requests(self):
         logging.debug('Spider is starting...')
         isbn_arr = self.isbn_arr
@@ -102,6 +113,20 @@ class BookSpider(scrapy.Spider):
         book_cover = response.css('img.bc-menu__image::attr(src)').get()
         book_genres = response.css("p:contains('Жанры') a::text").getall()
         expand = response.css('a.read-more__link::text').get()
+        if response.css('a.bc-rating-medium span::text').get() is not None:
+            rate = response.css('a.bc-rating-medium span::text').get().strip()
+        else:
+            rate = None
+
+        try:
+            read = response.css("a.popup-load-data.bc-stat__link:contains('прочит')").get()
+        except:
+            read = None
+
+        try:
+            plan_to_read = response.css("a.popup-load-data.bc-stat__link:contains('планир')").get()
+        except:
+            plan_to_read = None
 
         if expand:
             object_id = self.get_object_id(response.url)
@@ -113,30 +138,34 @@ class BookSpider(scrapy.Spider):
                                  body=params,
                                  callback=self.parse_description,
                                  meta={'isbn': response.meta.get('isbn'), 'book_cover': book_cover,
-                                       'book_genres': book_genres})
+                                       'book_genres': book_genres, 'rate': rate, 'read': read, 'plan_to_read': plan_to_read})
         else:
             description = response.css('#lenta-card__text-edition-escaped::text').get()
-            book_item = BestsellerItem(
+            yield self.book_item(
                 isbn=response.meta.get('isbn'),
                 description=description,
                 book_cover=book_cover,
                 book_genres=book_genres,
+                rate=rate,
+                read=read,
+                plan_to_read=plan_to_read,
             )
-            yield book_item
             logging.debug('Complete parsing book')
 
     def parse_description(self, response):
         logging.debug('Parsing full description...', )
         data = response.json()
         content = data.get('content')
-        book_cover = response.meta.get('book_cover')
-        book_genres = response.meta.get('book_genres')
 
-        book_item = BestsellerItem(
+        yield self.book_item(
             isbn=response.meta.get('isbn'),
             description=content,
-            book_cover=book_cover,
-            book_genres=book_genres,
+            book_cover=response.meta.get('book_cover'),
+            book_genres=response.meta.get('book_genres'),
+            rate=response.meta.get('rate'),
+            read=response.meta.get('read'),
+            plan_to_read=response.meta.get('plan_to_read'),
         )
-        yield book_item
+
         logging.debug('Complete parsing book')
+
