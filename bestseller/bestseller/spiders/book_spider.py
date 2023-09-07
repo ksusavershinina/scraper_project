@@ -62,7 +62,7 @@ class BookSpider(scrapy.Spider):
                         '__gr': 'g102c40_g1c14_g1243c1_g1240c5_g533c5_g527c7_g433c7_g1217c7_g1360c2_g1226c2_g430c3_g1143c6_g1140c12_g137c4_g144c2_g146c1_g426c1_g143c2_g394c3_g387c3_g510c6_g520c2_g601c6_g537c49_g549c1_g547c4_g670c1_g641c1_g76c2_g535c2_g518c1_g611c40_g107c2_g150c1_g1319c1_g1318c1_g148c1_g141c1_g149c2_g142c1_g1142c5_g1321c1_g1163c2_g1150c2_g1247c3_g1276c3_g511c1_g516c1_g140c1_g525c1_g600c1_g1147c1_g1098c2_g1095c2_g551c3_g1323c1_g416c1_g1128c1_',
                         'iwatchyou': '9dfaead2695764c012c07556a76f65c9'}
 
-    handle_httpstatus_list = [404]
+    handle_httpstatus_list = [404, 302]
 
     def __init__(self, isbn_arr):
         self.isbn_arr = isbn_arr
@@ -99,7 +99,7 @@ class BookSpider(scrapy.Spider):
 
     def parse_book(self, response):
 
-        if response.status == 404:
+        if response.status == 404 or response.status == 302:
             logging.error(f"Received 404 for URL: {response.url}")
             return
 
@@ -150,7 +150,7 @@ class BookSpider(scrapy.Spider):
 
     def parse_description(self, response):
 
-        if response.status == 404:
+        if response.status == 404 or response.status == 302:
             logging.error(f"Received 404 for URL: {response.url}")
             return
 

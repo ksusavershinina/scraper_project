@@ -22,6 +22,7 @@ class ItemPipeline:
             item['description'] = re.sub(r'<br />|\r|\n', '', item['description'])
             item['description'] = re.sub(r'&quot;', '"', item['description'])
             item['description'] = re.sub('&amp;|&#039;', '\'', item['description'])
+            item['description'] = re.sub('&nbsp;', ' ', item['description'])
 
         if item['book_genres'] is not None:
             book_genres = item['book_genres']
@@ -37,6 +38,7 @@ class ItemPipeline:
                 item['read'] = match.group(1)
 
         if item['plan_to_read'] is not None:
+            item['plan_to_read'] = re.sub('&nbsp;', ' ', item['plan_to_read'])
             match = re.search(r'<b>(\d+)</b>', item['plan_to_read'])
             if match:
                 item['plan_to_read'] = match.group(1)
@@ -52,14 +54,14 @@ class DatabasePipeline:
 
     def create_table(self):
         self.cur.execute(
-        """CREATE TABLE IF NOT EXISTS parsed_books (ID INTEGER PRIMARY KEY, ISBN TEXT, book_cover TEXT, 
-        book_genres TEXT, rate REAL, read INTEGER, plan_to_read INTEGER, description TEXT)""")
+        """CREATE TABLE IF NOT EXISTS parsed_books (ID INTEGER PRIMARY KEY, isbn TEXT, description TEXT, book_cover TEXT, 
+        book_genres TEXT, rate REAL, read INTEGER, plan_to_read INTEGER)""")
 
     def process_item(self, item, spider):
-        self.cur.execute("""INSERT INTO parsed_books ISBN, description, book_cover, book_genres, rate, read, plan_to_read
+        self.cur.execute("""INSERT INTO parsed_books (isbn, description, book_cover, book_genres, rate, read, plan_to_read)
             VALUES (?, ?, ?, ?, ?, ?, ?)""",
                          (
-                             item['isbn'][0],
+                             item['isbn'],
                              item['description'],
                              item['book_cover'],
                              json.dumps(item['book_genres'], ensure_ascii=False),

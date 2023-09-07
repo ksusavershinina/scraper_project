@@ -1,5 +1,5 @@
-# from spiders.book_spider import BookSpider
-from spiders.js_test_spider import BookSpider
+from spiders.book_spider import BookSpider
+# from spiders.js_test_spider import BookSpider
 from scrapy.crawler import CrawlerProcess
 import logging
 import sqlite3
@@ -24,7 +24,7 @@ def start_livelib_spider(ROBOTSTXT_OBEY=False, DOWNLOAD_DELAY=0.01, LOG_LEVEL='D
         'LOG_SHORT_NAMES': True,
         'ITEM_PIPELINES': {
             'scraper_project.bestseller.bestseller.pipelines.ItemPipeline': 300,
-            # 'scraper_project.bestseller.bestseller.pipelines.DatabasePipeline': 400,
+            'scraper_project.bestseller.bestseller.pipelines.DatabasePipeline': 400,
         },
         'FEEDS': {
             '%(name)s/%(name)s_%(time)s.json': {
