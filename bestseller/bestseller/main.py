@@ -4,16 +4,11 @@ from scrapy.crawler import CrawlerProcess
 import logging
 import sqlite3
 
-
-
 con = sqlite3.connect('slow_books_database.db')
 cur = con.cursor()
-cur.execute("SELECT ISBN FROM book_description WHERE Annotation = NULL")
+cur.execute("SELECT ISBN FROM book_description WHERE Annotation IS NULL ORDER BY random() LIMIT 50")
 isbn_lst = cur.fetchall()
 con.close()
-
-print(isbn_lst)
-
 
 
 def start_livelib_spider(ROBOTSTXT_OBEY=False, DOWNLOAD_DELAY=0.01, LOG_LEVEL='DEBUG', filter_stats=False):
