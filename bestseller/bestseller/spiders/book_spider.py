@@ -26,7 +26,15 @@ class BookSpider(scrapy.Spider):
         'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
-    cookies_for_book = {'__ddg1_': 'XR1IzhP6AW7V7Gfjjata', 'LiveLibId': '4cfcc567dda02071eee09dca94ff232d', '__llutmz': '-600', '__llutmf': '0', 'll_asid': '1371254432', 'SL_GWPT_Show_Hide_tmp': '1', 'SL_wptGlobTipTmp': '1', '__ll_fv': '1690682303', '__ll_dvs': '5', 'closed_vkid_onetap': '1', '__ll_ab_mp': '1', '__utnt': 'g0_y0_a15721_u0_c0', '__ll_unreg_session': '4cfcc567dda02071eee09dca94ff232d', '__ll_unreg_sessions_count': '1', 'pushsub': '1', '__ll_tum': '826029989', '__ll_cp': '2', '__ddgid_': 'v2x57OEhW0hhj58a', '__ddg2_': 'hj9U1HhbyVRJjBmG', '__ll_dv': '1693971817', '__gr': 'g102c40_g1c14_g1243c1_g1240c5_g533c5_g527c7_g433c7_g1217c7_g1360c2_g1226c2_g430c3_g1143c6_g1140c12_g137c4_g144c2_g146c1_g426c1_g143c2_g394c3_g387c3_g510c6_g520c2_g601c6_g537c49_g549c1_g547c4_g670c1_g641c1_g76c2_g535c2_g518c1_g611c40_g107c2_g150c1_g1319c1_g1318c1_g148c1_g141c1_g149c2_g142c1_g1142c5_g1321c1_g1163c2_g1150c2_g1247c3_g1276c3_g511c1_g516c1_g140c1_g525c1_g600c1_g1147c1_g1098c2_g1095c2_g551c3_g1323c1_g416c1_g1128c1_', 'iwatchyou': '9dfaead2695764c012c07556a76f65c9'}
+    cookies_for_book = {'__ddg1_': 'XR1IzhP6AW7V7Gfjjata', 'LiveLibId': '4cfcc567dda02071eee09dca94ff232d',
+                        '__llutmz': '-600', '__llutmf': '0', 'll_asid': '1371254432', 'SL_GWPT_Show_Hide_tmp': '1',
+                        'SL_wptGlobTipTmp': '1', '__ll_fv': '1690682303', '__ll_dvs': '5', 'closed_vkid_onetap': '1',
+                        '__ll_ab_mp': '1', '__utnt': 'g0_y0_a15721_u0_c0',
+                        '__ll_unreg_session': '4cfcc567dda02071eee09dca94ff232d', '__ll_unreg_sessions_count': '1',
+                        'pushsub': '1', '__ll_tum': '826029989', '__ll_cp': '2', '__ddgid_': 'v2x57OEhW0hhj58a',
+                        '__ddg2_': 'hj9U1HhbyVRJjBmG', '__ll_dv': '1693971817',
+                        '__gr': 'g102c40_g1c14_g1243c1_g1240c5_g533c5_g527c7_g433c7_g1217c7_g1360c2_g1226c2_g430c3_g1143c6_g1140c12_g137c4_g144c2_g146c1_g426c1_g143c2_g394c3_g387c3_g510c6_g520c2_g601c6_g537c49_g549c1_g547c4_g670c1_g641c1_g76c2_g535c2_g518c1_g611c40_g107c2_g150c1_g1319c1_g1318c1_g148c1_g141c1_g149c2_g142c1_g1142c5_g1321c1_g1163c2_g1150c2_g1247c3_g1276c3_g511c1_g516c1_g140c1_g525c1_g600c1_g1147c1_g1098c2_g1095c2_g551c3_g1323c1_g416c1_g1128c1_',
+                        'iwatchyou': '9dfaead2695764c012c07556a76f65c9'}
 
     headers_for_desc = {
         'Host': 'www.livelib.ru',
@@ -44,7 +52,17 @@ class BookSpider(scrapy.Spider):
         'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
-    cookies_for_desc = {'__ddg1_': 'XR1IzhP6AW7V7Gfjjata', 'LiveLibId': '4cfcc567dda02071eee09dca94ff232d', '__llutmz': '-600', '__llutmf': '0', 'll_asid': '1371254432', 'SL_GWPT_Show_Hide_tmp': '1', 'SL_wptGlobTipTmp': '1', '__ll_fv': '1690682303', '__ll_dvs': '5', 'closed_vkid_onetap': '1', '__ll_ab_mp': '1', '__utnt': 'g0_y0_a15721_u0_c0', '__ll_unreg_session': '4cfcc567dda02071eee09dca94ff232d', '__ll_unreg_sessions_count': '1', 'pushsub': '1', '__ll_tum': '826029989', '__ll_cp': '2', '__ddgid_': 'v2x57OEhW0hhj58a', '__ddg2_': 'hj9U1HhbyVRJjBmG', '__ll_dv': '1693971817', '__gr': 'g102c40_g1c14_g1243c1_g1240c5_g533c5_g527c7_g433c7_g1217c7_g1360c2_g1226c2_g430c3_g1143c6_g1140c12_g137c4_g144c2_g146c1_g426c1_g143c2_g394c3_g387c3_g510c6_g520c2_g601c6_g537c49_g549c1_g547c4_g670c1_g641c1_g76c2_g535c2_g518c1_g611c40_g107c2_g150c1_g1319c1_g1318c1_g148c1_g141c1_g149c2_g142c1_g1142c5_g1321c1_g1163c2_g1150c2_g1247c3_g1276c3_g511c1_g516c1_g140c1_g525c1_g600c1_g1147c1_g1098c2_g1095c2_g551c3_g1323c1_g416c1_g1128c1_', 'iwatchyou': '9dfaead2695764c012c07556a76f65c9'}
+    cookies_for_desc = {'__ddg1_': 'XR1IzhP6AW7V7Gfjjata', 'LiveLibId': '4cfcc567dda02071eee09dca94ff232d',
+                        '__llutmz': '-600', '__llutmf': '0', 'll_asid': '1371254432', 'SL_GWPT_Show_Hide_tmp': '1',
+                        'SL_wptGlobTipTmp': '1', '__ll_fv': '1690682303', '__ll_dvs': '5', 'closed_vkid_onetap': '1',
+                        '__ll_ab_mp': '1', '__utnt': 'g0_y0_a15721_u0_c0',
+                        '__ll_unreg_session': '4cfcc567dda02071eee09dca94ff232d', '__ll_unreg_sessions_count': '1',
+                        'pushsub': '1', '__ll_tum': '826029989', '__ll_cp': '2', '__ddgid_': 'v2x57OEhW0hhj58a',
+                        '__ddg2_': 'hj9U1HhbyVRJjBmG', '__ll_dv': '1693971817',
+                        '__gr': 'g102c40_g1c14_g1243c1_g1240c5_g533c5_g527c7_g433c7_g1217c7_g1360c2_g1226c2_g430c3_g1143c6_g1140c12_g137c4_g144c2_g146c1_g426c1_g143c2_g394c3_g387c3_g510c6_g520c2_g601c6_g537c49_g549c1_g547c4_g670c1_g641c1_g76c2_g535c2_g518c1_g611c40_g107c2_g150c1_g1319c1_g1318c1_g148c1_g141c1_g149c2_g142c1_g1142c5_g1321c1_g1163c2_g1150c2_g1247c3_g1276c3_g511c1_g516c1_g140c1_g525c1_g600c1_g1147c1_g1098c2_g1095c2_g551c3_g1323c1_g416c1_g1128c1_',
+                        'iwatchyou': '9dfaead2695764c012c07556a76f65c9'}
+
+    handle_httpstatus_list = [404]
 
     def __init__(self, isbn_arr):
         self.isbn_arr = isbn_arr
@@ -75,11 +93,16 @@ class BookSpider(scrapy.Spider):
         logging.debug('Spider is starting...')
         isbn_arr = self.isbn_arr
         for isbn in isbn_arr:
-            link = f"https://www.livelib.ru/book/{isbn}"
+            link = f"https://www.livelib.ru/book/{isbn[0]}"
             yield scrapy.Request(url=link, callback=self.parse_book, headers=self.headers_for_book, method="POST",
                                  cookies=self.cookies_for_book, meta={'isbn': isbn})
 
     def parse_book(self, response):
+
+        if response.status == 404:
+            logging.error(f"Received 404 for URL: {response.url}")
+            return
+
         logging.debug('Parsing book...', )
 
         book_cover = response.css('img.bc-menu__image::attr(src)').get()
@@ -110,7 +133,8 @@ class BookSpider(scrapy.Spider):
                                  body=params,
                                  callback=self.parse_description,
                                  meta={'isbn': response.meta.get('isbn'), 'book_cover': book_cover,
-                                       'book_genres': book_genres, 'rate': rate, 'read': read, 'plan_to_read': plan_to_read})
+                                       'book_genres': book_genres, 'rate': rate, 'read': read,
+                                       'plan_to_read': plan_to_read})
         else:
             description = response.css('#lenta-card__text-edition-escaped::text').get()
             yield self.book_item(
@@ -125,6 +149,11 @@ class BookSpider(scrapy.Spider):
             logging.debug('Complete parsing book')
 
     def parse_description(self, response):
+
+        if response.status == 404:
+            logging.error(f"Received 404 for URL: {response.url}")
+            return
+
         logging.debug('Parsing full description...', )
         data = response.json()
         content = data.get('content')
