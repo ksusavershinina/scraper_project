@@ -26,21 +26,7 @@ class BookSpider(scrapy.Spider):
         'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
-    cookies_for_book = {'__llutmz': '-600', '__llutmf': '0', '__ll_fv': '1677902920', '_ym_uid': '1677902921278570168',
-                        '_ym_d': '1677902921', 'tmr_lvid': 'c1da78ba680c9a04c8473880e908bcc6',
-                        'tmr_lvidTS': '1677902922063',
-                        '__ll_ab_mp': '1', '__popupmail_showed_uc': '2', '__ddg1_': 'qA2HNADSt7nh3TNDCbBr',
-                        'LiveLibId': 'fbae66966e333521db96ad3027358196', '__ll_tum': '4182824734', '__ll_dvs': '4',
-                        'll_asid': '1402019738', '_ym_isad': '2', '_gid': 'GA1.2.981752588.1693499713',
-                        'promoLLid': '1mcjf4mtul1cqab76bq0ajkse0', 'showed_vkid_onetap': '1', '__ll_unreg_r': '60',
-                        '__utnt': 'g0_y0_a15721_u0_c0', '__ll_unreg_session': 'fbae66966e333521db96ad3027358196',
-                        '__ll_unreg_sessions_count': '11', '__ll_popup_count_pviews': 'regc1_mailc1_',
-                        '__ll_popup_showed': 'challenge23unreg_', '__ll_popup_last_show': '1693499892',
-                        '__ll_popup_count_shows': 'regc1_mailc1_challenge23unregc1_', '__popupmail_showed': '1000',
-                        '__llaggbookbookstyle': 'middletiles', '__gr': 'g433c2_g1217c2_g706c1_g692c1_g1c6_',
-                        '_ga_90RPM8SDHL': 'GS1.1.1693499711.1.1.1693502744.58.0.0', '__ll_cp': '17',
-                        '_ga': 'GA1.2.1851051766.1677902921',
-                        'tmr_detect': '0%7C1693502746687', '__ll_dv': '1693502805'}
+    cookies_for_book = {'__ddg1_': 'XR1IzhP6AW7V7Gfjjata', 'LiveLibId': '4cfcc567dda02071eee09dca94ff232d', '__llutmz': '-600', '__llutmf': '0', 'll_asid': '1371254432', 'SL_GWPT_Show_Hide_tmp': '1', 'SL_wptGlobTipTmp': '1', '__ll_fv': '1690682303', '__ll_dvs': '5', 'closed_vkid_onetap': '1', '__ll_ab_mp': '1', '__utnt': 'g0_y0_a15721_u0_c0', '__ll_unreg_session': '4cfcc567dda02071eee09dca94ff232d', '__ll_unreg_sessions_count': '1', 'pushsub': '1', '__ll_tum': '826029989', '__ll_cp': '2', '__ddgid_': 'v2x57OEhW0hhj58a', '__ddg2_': 'hj9U1HhbyVRJjBmG', '__ll_dv': '1693971817', '__gr': 'g102c40_g1c14_g1243c1_g1240c5_g533c5_g527c7_g433c7_g1217c7_g1360c2_g1226c2_g430c3_g1143c6_g1140c12_g137c4_g144c2_g146c1_g426c1_g143c2_g394c3_g387c3_g510c6_g520c2_g601c6_g537c49_g549c1_g547c4_g670c1_g641c1_g76c2_g535c2_g518c1_g611c40_g107c2_g150c1_g1319c1_g1318c1_g148c1_g141c1_g149c2_g142c1_g1142c5_g1321c1_g1163c2_g1150c2_g1247c3_g1276c3_g511c1_g516c1_g140c1_g525c1_g600c1_g1147c1_g1098c2_g1095c2_g551c3_g1323c1_g416c1_g1128c1_', 'iwatchyou': '9dfaead2695764c012c07556a76f65c9'}
 
     headers_for_desc = {
         'Host': 'www.livelib.ru',
@@ -58,21 +44,7 @@ class BookSpider(scrapy.Spider):
         'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
-    cookies_for_desc = {'__ddg1_': 'XMke2VWMxlHK7ym9cJ5y', '__ll_tum': '2811089264', '__ll_ab_mp': '1',
-                        'tmr_lvid': 'b64effb70d7d4eee3b73f6f8e1f1c5dd', 'tmr_lvidTS': '1693104841239',
-                        '_ym_uid': '1693104842929034073', '_ym_d': '1693104842', '__ll_fv': '1693104847',
-                        '__llutmz': '-600', '__llutmf': '0', '__ll_popup_count_shows': 'challenge23unregc1_',
-                        '_ym_isad': '1', '_gid': 'GA1.2.218806420.1693659428',
-                        'LiveLibId': '6bd6aa1f8a8adc77e2e8efc115e72077', '__ll_dvs': '5',
-                        'll_asid': '1403330600', '__utnt': 'g0_y0_a15721_u0_c0',
-                        '__ll_unreg_session': '6bd6aa1f8a8adc77e2e8efc115e72077',
-                        '__ll_unreg_sessions_count': '4', 'promoLLid': 'uo03dh2nptucd8u4hacm514u70',
-                        'showed_vkid_onetap': '1', '__ll_unreg_r': '60',
-                        '__gr': 'g137c2_g1143c1_g1140c1_g533c1_g527c1_', '__gads': 'ID', '__gpi': 'UID',
-                        '__ll_cp': '10', '_ga': 'GA1.2.466385732.1693104841',
-                        'tmr_detect': '0%7C1693711595846',
-                        '_ga_90RPM8SDHL': 'GS1.1.1693711592.3.1.1693711596.56.0.0',
-                        '__ll_popup_count_pviews': 'mailc1_', '__ll_dv': '1693711657'}
+    cookies_for_desc = {'__ddg1_': 'XR1IzhP6AW7V7Gfjjata', 'LiveLibId': '4cfcc567dda02071eee09dca94ff232d', '__llutmz': '-600', '__llutmf': '0', 'll_asid': '1371254432', 'SL_GWPT_Show_Hide_tmp': '1', 'SL_wptGlobTipTmp': '1', '__ll_fv': '1690682303', '__ll_dvs': '5', 'closed_vkid_onetap': '1', '__ll_ab_mp': '1', '__utnt': 'g0_y0_a15721_u0_c0', '__ll_unreg_session': '4cfcc567dda02071eee09dca94ff232d', '__ll_unreg_sessions_count': '1', 'pushsub': '1', '__ll_tum': '826029989', '__ll_cp': '2', '__ddgid_': 'v2x57OEhW0hhj58a', '__ddg2_': 'hj9U1HhbyVRJjBmG', '__ll_dv': '1693971817', '__gr': 'g102c40_g1c14_g1243c1_g1240c5_g533c5_g527c7_g433c7_g1217c7_g1360c2_g1226c2_g430c3_g1143c6_g1140c12_g137c4_g144c2_g146c1_g426c1_g143c2_g394c3_g387c3_g510c6_g520c2_g601c6_g537c49_g549c1_g547c4_g670c1_g641c1_g76c2_g535c2_g518c1_g611c40_g107c2_g150c1_g1319c1_g1318c1_g148c1_g141c1_g149c2_g142c1_g1142c5_g1321c1_g1163c2_g1150c2_g1247c3_g1276c3_g511c1_g516c1_g140c1_g525c1_g600c1_g1147c1_g1098c2_g1095c2_g551c3_g1323c1_g416c1_g1128c1_', 'iwatchyou': '9dfaead2695764c012c07556a76f65c9'}
 
     def __init__(self, isbn_arr):
         self.isbn_arr = isbn_arr
