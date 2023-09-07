@@ -44,7 +44,7 @@ class ItemPipeline:
 
 class DatabasePipeline:
     def __init__(self):
-        self.con = sqlite3.connect('books2.db')
+        self.con = sqlite3.connect('slow_books_database.db')
         self.cur = self.con.cursor()
 
     def process_item(self, item, spider):
