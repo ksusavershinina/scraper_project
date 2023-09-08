@@ -15,7 +15,7 @@ parserConfig = CrawlerRunner(settings={'ROBOTSTXT_OBEY': False,
                                            'scraper_project.parsing.parsing.pipelines.DatabasePipeline': 200
                                        }})
 
-con = sqlite3.connect('slow_books_database.db')
+con = sqlite3.connect('database/slow_books_database.db')
 cur = con.cursor()
 cur.execute("SELECT ID, ISBN FROM book_description")
 id_isbn_lst = cur.fetchall()

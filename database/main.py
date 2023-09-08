@@ -67,7 +67,7 @@ def create_table(table_name, column_dic):
     cur.execute(query)
 
 
-con = sqlite3.connect('../slow_books_database.db')
+con = sqlite3.connect('slow_books_database.db')
 
 cur = con.cursor()
 
