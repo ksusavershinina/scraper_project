@@ -5,7 +5,6 @@ from scraper_project.parsing.parsing.items import ParsingItem
 class Book24Spider(scrapy.Spider):
     name = "book24"
     allowed_domains = ["book24.ru", "book24.ru/search"]
-
     headers = {
         'host': 'book24.ru',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -22,7 +21,6 @@ class Book24Spider(scrapy.Spider):
         'Upgrade-Insecure-Requests': "1",
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.203',
     }
-
     cookie = {
         'g4c_x': '1', 'gdeslon.ru.__arc_aid': '91052',
         'gdeslon.ru.__arc_token': '0738e1159429026c1a03ee720bff78333a46959c', 'gdeslon.ru.__arc_domain': 'gdeslon.ru',
@@ -62,38 +60,25 @@ class Book24Spider(scrapy.Spider):
     def parse_link(self, response, **kwargs):
 
         book_link = response.css('.product-card__content a::attr(href)').get()
-        id = response.meta['id']
+        book_id = response.meta['id']
         isbn = response.meta['isbn']
         if not book_link:
-
-            book_item = ParsingItem(
-                id=id,
-                isbn=isbn,
-                book24_score=None,
-                book24_feedback=None,
-                number_of_buyers=None,
-                description=None,
-                book_cover=None
-            )
-
-            yield book_item
-
+            pass
         else:
             yield scrapy.Request(
                 url='https://book24.ru{}'.format(book_link),
-                headers=self.headers, callback=self.parse_book, meta={'id': id, 'isbn': isbn})
+                headers=self.headers, callback=self.parse_book, meta={'id': book_id, 'isbn': isbn})
 
     def parse_book(self, response, **kwargs):
-        id = response.meta['id']
+        book_id = response.meta['id']
         isbn = response.meta['isbn']
-        book24_score = response.css('.rating-widget__main-text::text').getall()[0]
-        book24_feedback = response.css('.rating-widget__other-text::text').getall()[0]
+        book24_score = response.css('.rating-widget__main-text::text').get()
+        book24_feedback = response.css('.rating-widget__other-text::text').get()
         number_of_buyers = response.css('.product-detail-page__purchased-text::text').get()
         description = response.css('.product-about__text p::text').getall()
         book_cover = response.css('img.product-poster__main-image::attr(src)').get()
-
         book_item = ParsingItem(
-            id=id,
+            id=book_id,
             isbn=isbn,
             book24_score=book24_score,
             book24_feedback=book24_feedback,
@@ -101,5 +86,4 @@ class Book24Spider(scrapy.Spider):
             description=description,
             book_cover=book_cover
         )
-
         yield book_item

@@ -19,6 +19,8 @@ con = sqlite3.connect('database/slow_books_database.db')
 cur = con.cursor()
 cur.execute("SELECT ID, ISBN FROM book_description")
 id_isbn_lst = cur.fetchall()
+con.close()
+
 
 @defer.inlineCallbacks
 def book24_parse():
@@ -27,4 +29,3 @@ def book24_parse():
 
 book24_parse()
 reactor.run()
-con.close()

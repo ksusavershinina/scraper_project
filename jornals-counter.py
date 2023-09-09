@@ -1,4 +1,4 @@
-import  sqlite3
+import sqlite3
 import csv
 
 con = sqlite3.connect('database/slow_books_database.db')
@@ -19,7 +19,5 @@ with open('database/statistic.csv', 'w', newline='', encoding='utf-8') as file:
         publisher = row[1]
         count = row[2]
         writer.writerow([isbn, count, count * 100 / number_of_books, publisher])
-
-
 
 con.close()

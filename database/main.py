@@ -25,7 +25,7 @@ def clean_isbn(column_name):
         lambda x: re.sub('-', '', x) if (type(x) != float and not (re.search(r'^\W{1}', str(x)))) else np.nan)
 
 
-def сlean_date(column_name):
+def clean_date(column_name):
     df[column_name] = df[column_name].map(lambda x: x if re.search(r'\d{2} \w{3} \d{4}', str(x)) else np.nan)
     df[column_name] = df[column_name].map(lambda x: dt.datetime.strptime(str(x), '%d %b %Y').strftime('%d-%m-%Y'))
 
@@ -53,7 +53,7 @@ def clean(column_name):
     elif column_name == 'Cost_rub':
         clean_cost(column_name)
     elif column_name == 'Date':
-        сlean_date(column_name)
+        clean_date(column_name)
     else:
         pass
 
@@ -73,7 +73,8 @@ cur = con.cursor()
 
 df = pd.read_csv('mk_price_21-07-2023.csv', sep=";")
 
-columns_with_str = ('Booking', 'Author', 'Name', 'Publisher', 'City', 'Code_txt', 'Format', 'Size', 'Wrapper_type', 'Serias',
+columns_with_str = (
+    'Booking', 'Author', 'Name', 'Publisher', 'City', 'Code_txt', 'Format', 'Size', 'Wrapper_type', 'Serias',
     'Standart', 'Circulation',
     'Availiablitility', 'In_storage', 'Annotation', 'Prepaytion')
 columns_with_numbers = ('Code_num', 'Year', 'Number_of_pages')
