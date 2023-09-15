@@ -58,7 +58,6 @@ class Book24Spider(scrapy.Spider):
                 headers=self.headers, method='GET', cookies=self.cookie, meta={'id': item[0], 'isbn': item[1]})
 
     def parse_link(self, response, **kwargs):
-
         book_link = response.css('.product-card__content a::attr(href)').get()
         book_id = response.meta['id']
         isbn = response.meta['isbn']
@@ -76,14 +75,18 @@ class Book24Spider(scrapy.Spider):
         book24_feedback = response.css('.rating-widget__other-text::text').get()
         number_of_buyers = response.css('.product-detail-page__purchased-text::text').get()
         description = response.css('.product-about__text p::text').getall()
-        book_cover = response.css('img.product-poster__main-image::attr(src)').get()
+        images = response.css('img.product-poster__main-image::attr(src)').get()
+        print(images)
+        image_urls = [response.urljoin(images)]
         book_item = ParsingItem(
-            id=book_id,
+            ID=book_id,
             isbn=isbn,
             book24_score=book24_score,
             book24_feedback=book24_feedback,
             number_of_buyers=number_of_buyers,
             description=description,
-            book_cover=book_cover
+            images=images,
+            image_urls=image_urls
         )
         yield book_item
+
