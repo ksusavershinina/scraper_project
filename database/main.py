@@ -8,54 +8,57 @@ import locale
 locale.setlocale(locale.LC_TIME, 'ru_RU')
 
 
-# def clean_str(column_name):
-#     df[column_name] = df[column_name].map(
-#         lambda x: re.sub('[\n\t]', '', str(x)) if (type(x) != float and not (re.search(r'^[.,\s-]$', x))) else np.nan)
-#
+def clean_str(column_name):
+    df[column_name] = df[column_name].map(
+        lambda x: re.sub('[\n\t]', '', str(x)) if (type(x) != float and not (re.search(r'^[.,\s-]$', x))) else np.nan)
 
 def clean_numbers(column_name):
     df[column_name] = df[column_name].map(
         lambda x: re.sub(r'\D', '', str(x)) if (
                 type(x) != float and not (re.search(r'^[.,\w\s-]$', str(x)))) else np.nan)
-    df[column_name] = df[column_name].map(lambda x: re.sub(r'\d*[-,;.+]', '', str(x)) if (type(x) != float) else np.nan)
+    df[column_name] = df[column_name].map(lambda x: re.sub(r'^\d{4}[-,;.+]', '', str(x)) if (type(x) != float) else np.nan)
+    df[column_name] = df[column_name].map(
+        lambda x: re.sub(r'^\d{3}[-,;.+]', '', str(x)) if (type(x) != float) else np.nan)
 
 
-# def clean_isbn(column_name):
-#     df[column_name] = df[column_name].map(
-#         lambda x: re.sub('-', '', x) if (type(x) != float and not (re.search(r'^\W{1}', str(x)))) else np.nan)
+def clean_isbn(column_name):
+    df[column_name] = df[column_name].map(
+        lambda x: re.sub('-', '', x) if (type(x) != float and not (re.search(r'^\W{1}', str(x)))) else np.nan)
+    df[column_name] = df[column_name].map(
+        lambda x: re.sub('–', '', x) if (type(x) != float and not (re.search(r'^\W{1}', str(x)))) else np.nan)
 
 
-# def clean_date(column_name):
-#     df[column_name] = df[column_name].map(lambda x: x if re.search(r'\d{2} \w{3} \d{4}', str(x)) else np.nan)
-#     df[column_name] = df[column_name].map(lambda x: dt.datetime.strptime(str(x), '%d %b %Y').strftime('%d-%m-%Y'))
+def clean_date(column_name):
+    df[column_name] = df[column_name].map(lambda x: x if re.search(r'\d{2} \w{3} \d{4}', str(x)) else np.nan)
+    df[column_name] = df[column_name].map(lambda x: dt.datetime.strptime(str(x), '%d %b %Y').strftime('%d-%m-%Y'))
 
 
-# def clean_cost(column_name):
-#     df[column_name] = df[column_name].map(
-#         lambda x: re.sub('₽', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-#
-#
-# def clean_weight(column_name):
-#     df[column_name] = df[column_name].map(
-#         lambda x: re.sub(',', '.', x) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
-#     df[column_name] = df[column_name].map(lambda x: float(x) / 1000 if not (re.search('[.]', str(x))) else x)
+def clean_cost(column_name):
+    df[column_name] = df[column_name].map(
+        lambda x: re.sub('₽', '', str(x)) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+
+
+def clean_weight(column_name):
+    df[column_name] = df[column_name].map(
+        lambda x: re.sub(',', '.', x) if (type(x) != float and re.search(r'\W+', x)) else np.nan)
+    df[column_name] = df[column_name].map(lambda x: float(x) / 1000 if not (re.search('[.]', str(x))) else x)
 
 
 def clean(column_name):
     if column_name in columns_with_numbers:
         clean_numbers(column_name)
-    # elif column_name in columns_with_str:
-    #     clean_str(column_name)
-    # elif column_name == 'ISBN':
-    #     clean_isbn(column_name)
-    # elif column_name == 'Weight':
-    #     clean_weight(column_name)
-    # elif column_name == 'Cost_rub':
-    #     clean_cost(column_name)
-    # elif column_name == 'Date':
-    #     clean_date(column_name)
-    # else:
-    #     pass
+    elif column_name in columns_with_str:
+        clean_str(column_name)
+    elif column_name == 'ISBN':
+        clean_isbn(column_name)
+    elif column_name == 'Weight':
+        clean_weight(column_name)
+    elif column_name == 'Cost_rub':
+        clean_cost(column_name)
+    elif column_name == 'Date':
+        clean_date(column_name)
+    else:
+        pass
 
 
 def create_table(table_name, column_dic):
@@ -67,7 +70,7 @@ def create_table(table_name, column_dic):
     cur.execute(query)
 
 
-con = sqlite3.connect('database/slow_books_database.db')
+con = sqlite3.connect('slow_books_database.db')
 
 cur = con.cursor()
 
@@ -111,16 +114,16 @@ tables = {
 
 
 
-# for tables_name, columns_dic in tables.items():
-#     create_table(tables_name, columns_dic)
-#
-# for tables_name, table_column_dic in tables.items():
-#     data = pd.DataFrame()
-#     for column in df:
-#         if column in table_column_dic.keys():
-#             clean(column)
-#             data.insert(len(data.columns), column, df[column])
-#     data.to_sql(tables_name, con, if_exists='append', index=False)
+for tables_name, columns_dic in tables.items():
+    create_table(tables_name, columns_dic)
+
+for tables_name, table_column_dic in tables.items():
+    data = pd.DataFrame()
+    for column in df:
+        if column in table_column_dic.keys():
+            clean(column)
+            data.insert(len(data.columns), column, df[column])
+    data.to_sql(tables_name, con, if_exists='append', index=False)
 
 con.commit()
 

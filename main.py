@@ -12,9 +12,9 @@ parserConfig = CrawlerRunner(settings={'ROBOTSTXT_OBEY': False,
                                        'LOG_SHORT_NAMES': True,
                                        'IMAGES_STORE': 'images',
                                        'ITEM_PIPELINES': {
-                                           'scraper_project.parsing.parsing.pipelines.CustomImagePipeline': 1,
+                                           'scrapy.pipelines.images.ImagesPipeline': 1,
                                            'scraper_project.parsing.parsing.pipelines.ItemPipeline': 200,
-                                           # 'scraper_project.parsing.parsing.pipelines.DatabasePipeline': 300
+                                            'scraper_project.parsing.parsing.pipelines.DatabasePipeline': 300
                                        },
                                        'FEEDS': {
                                            '%(name)s/%(name)s_%(time)s.json': {

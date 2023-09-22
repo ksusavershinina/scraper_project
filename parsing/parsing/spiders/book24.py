@@ -76,7 +76,6 @@ class Book24Spider(scrapy.Spider):
         number_of_buyers = response.css('.product-detail-page__purchased-text::text').get()
         description = response.css('.product-about__text p::text').getall()
         images = response.css('img.product-poster__main-image::attr(src)').get()
-        print(images)
         image_urls = [response.urljoin(images)]
         book_item = ParsingItem(
             ID=book_id,
