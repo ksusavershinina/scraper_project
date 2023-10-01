@@ -7,13 +7,18 @@ import scrapy
 
 
 class BestsellerItem(scrapy.Item):
+    livelib_id = scrapy.Field()
     isbn = scrapy.Field()
-    description = scrapy.Field()
     book_cover = scrapy.Field()
     book_genres = scrapy.Field()
     rate = scrapy.Field()
     read = scrapy.Field()
     plan_to_read = scrapy.Field()
 
+class DescriptionItem(scrapy.Item):
+    livelib_id = scrapy.Field()
+    description = scrapy.Field()
 
-
+class RateItem(scrapy.Item):
+    livelib_id = scrapy.Field()
+    ratings = scrapy.Field()
